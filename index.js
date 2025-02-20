@@ -32,6 +32,8 @@ let gravity = 0.4;
 let gameOver = false;
 let score = 0;
 let bestScore = 0;
+let gameSong = new Audio("assets/sounds/Super Mario Bros. Theme Song(MP3_320K).mp3")
+let gameSongStarted = false;
 
 window.onload=()=>{
   canva.height = boardHeight;
@@ -59,6 +61,7 @@ window.onload=()=>{
 const update = ()=>{
   requestAnimationFrame(update)
   if(gameOver){
+    gameSong.pause();
     return;
   }
   context.clearRect(0,0,canva.width,canva.height);
@@ -100,6 +103,8 @@ const update = ()=>{
     context.font = "25px Bungee Spice, sans-serif"
     context.fillText(`Score: ${score}`,4,350)
     context.fillText(`Best Score: ${bestScore}`,160,350)
+    const gameOver = new Audio("assets/sounds/Mario Death - Sound Effect (HD)(MP3_320K).mp3")
+    gameOver.play();
   }
 }
 
@@ -133,6 +138,11 @@ const drawPipe = ()=>{
 
 const moveBird = (e)=>{
   if(e.code === "Space"){
+    if(!gameSongStarted){
+      gameSong.loop = true;
+      gameSong.play();
+      gameSongStarted = true;
+    }
     velocityY = -6
   }
 
@@ -141,6 +151,8 @@ const moveBird = (e)=>{
     pipeArray = [];
     score = 0;
     gameOver = false;
+    gameSong.currentTime = 0;
+    gameSong.play();
     
   }
 }
